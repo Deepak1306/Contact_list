@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <title>
+        <%=locals.title%>
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://kit.fontawesome.com/2b49731cc8.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="/css/home.css">
+
+  </head>
+
+   <body>
+       <span>
+    <i class="fa-solid fa-address-card" style="font-size: 50px; font-weight:bold"></i><h1 id="page-head">CONTACTS LIST</h1></span>
+       <div class="list">
+           <ul style="list-style-type:none ;">
+             <%for(let i of contacts_list){%>
+               <li>
+                   <div class="texts blurred-box"> 
+                   <div class="items" style="text-align:left;"><%=i.name%></div>
+                   <div class="items"><a href="delete-contact/?phone=<%=i.phone%>"><i class="fa-solid fa-trash-can"></i></a></div>
+                   <div class="items" style="text-align:right ;margin-right: 5px;"><%=i.phone%></div>
+                   </div>
+               </li> 
+            <%} %>
+
+           </ul>
+       </div>
+       
+       <form action="create_contact" method="post" style="margin-left: 5px;">
+           <input type="text" name="name" placeholder="Enter_Name" required class="input_text">
+           <input type="number" name="phone" placeholder="Enter_Phone_No" required class="input_text" >
+           <button type="submit" class="sub_btn">Add</button>
+       </form>
+   </body>
+</html>
