@@ -3,6 +3,8 @@ const { redirect } = require('express/lib/response');
 const path=require('path');
 const port=8000;
 
+const db=require('./config/mongoose');
+const Contact=require('./models/contact');
 const app= express();
 
 app.set('view engine','ejs');
@@ -26,32 +28,50 @@ var contactList=[
 ]
 
 app.get('/',function(req,res){
-    return res.render('home',{
-        title:'Contact_list' ,
-        contacts_list:contactList
+  
+  Contact.find({},function(err,contact){
+         if(err){
+           console.log('err in finding contact');
+           return ;
+         }
+       
+         return res.render('home',{
+          title:'Contact_list' ,
+          contacts_list:contact
+      });
 
-    });
+  });
+  
+ 
 });
 
 app.post('/create_contact',function(req,res){
-  contactList.push({
+  Contact.create({
     name:req.body.name,
     phone:req.body.phone
+  },function(err,newcontact){
+     if(err){
+       console.log('error in creating contact');
+       return ;
+      }
+      
+      console.log('created-Contact',newcontact);
+      return res.redirect('/');
   });
-
-  return res.redirect('/');
-
 
 });
 
 app.get('/delete-contact/',function(req,res){
-  let phone=req.query.phone;
+  let id=req.query.id;
+   
+  Contact.findByIdAndDelete(id,function(err){
+        if(err){
+          console.log('err in deleting contact');
+          return ;
+        }
+       return res.redirect('/');
 
-  let contact_index=contactList.findIndex(contact => contact.phone==phone);
-  if(contact_index!=-1){
-    contactList.splice(contact_index,1);
-  }
-  return res.redirect('/');
+  });
 });
 
 app.listen(port,function(err){
